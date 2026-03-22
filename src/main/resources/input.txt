@@ -1,2 +1,1 @@
 Departure airport: #LAX
-Departure time: D(2007-04-05T12:30-02:00)

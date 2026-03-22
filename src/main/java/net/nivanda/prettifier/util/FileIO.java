@@ -13,7 +13,7 @@ import java.nio.file.Paths;
 import java.util.List;
 
 public class FileIO {
-    public String readTxt(String path) {
+    public static String readTxt(String path) {
         Path filepath = Paths.get(path);
         try {
             return Files.readString(filepath);
@@ -23,7 +23,7 @@ public class FileIO {
         }
     }
 
-    public void writeTxt(String path, String content) {
+    public static void writeTxt(String path, String content) {
         try {
             FileWriter fileWriter = new FileWriter(path);
             fileWriter.write(content);
@@ -34,7 +34,7 @@ public class FileIO {
         }
     }
 
-    public List<String[]> readCsv(String path) {
+    public static List<String[]> readCsv(String path) {
         try {
             FileReader fileReader = new FileReader(path);
             CSVReader csvReader = new CSVReaderBuilder(fileReader).withSkipLines(1).build();
