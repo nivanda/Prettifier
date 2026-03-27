@@ -10,7 +10,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class FileIO {
     public static String readTxt(String path) {
@@ -37,8 +40,9 @@ public class FileIO {
     public static List<String[]> readCsv(String path) {
         try {
             FileReader fileReader = new FileReader(path);
-            CSVReader csvReader = new CSVReaderBuilder(fileReader).withSkipLines(1).build();
+            CSVReader csvReader = new CSVReaderBuilder(fileReader).build();
             List<String[]> data = csvReader.readAll();
+            csvReader.close();
             return data;
         } catch (IOException e) {
             System.err.println("Airport lookup not found");
@@ -48,5 +52,45 @@ public class FileIO {
             e.printStackTrace();
             return null;
         }
+    }
+
+    public static Map<String, Integer> getCSVColumnOrderMap(String[] keys) {
+        Map<String, Integer> OrderMap = new HashMap<>();
+        if (Arrays.asList(keys).contains("name") &&
+            Arrays.asList(keys).contains("iso_country") &&
+            Arrays.asList(keys).contains("municipality") &&
+            Arrays.asList(keys).contains("icao_code") &&
+            Arrays.asList(keys).contains("iata_code") &&
+            Arrays.asList(keys).contains("coordinates")) {
+
+            for (int i = 0; i < keys.length; i++) {
+                OrderMap.put(keys[i], i);
+            }
+            return OrderMap;
+        }
+        return null;
+    }
+
+    public static boolean isCSVCorrupted(List<String[]> csv) {
+        final String LEGAL_CHARACTERS = "QWERTYUIOPASDFGHJKLZXCVBNM" +
+                                        "qwertyuiopasdfghjklzxcvbnm" +
+                                        "1234567890" +
+                                        "!@#$%^&*()-_=+\\|[]{};':\",.<>/?`~ " +
+                                        "\n\f\r";
+        for (String[] line : csv) {
+            for (String value : line) {
+                for (int i = 0; i < value.length(); i++) {
+                    if (LEGAL_CHARACTERS.indexOf(value.charAt(i)) == -1) {
+                        System.out.println("Airport lookup malformed");
+                        return true;
+                    }
+                }
+                if (value.isEmpty()) {
+                    System.out.println("Airport lookup malformed");
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
