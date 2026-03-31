@@ -3,9 +3,11 @@ package net.nivanda.prettifier.util;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class AirportCodeManager {
-    public static List<String> detectCodes(String content) {
+    public static List<String> OLDdetectCodes(String content) {
         final String LETTERS_CAPS = "QWERTYUIOPASDFGHJKLZXCVBNM";
         List<String> codesInContent = new ArrayList<>();
         String[] words = content.split(" ");
@@ -86,6 +88,21 @@ public class AirportCodeManager {
             }
         }
         return codesInContent;
+    }
+
+    public static List<String> detectCodes(String content, boolean bonusContent) {
+        Pattern pattern;
+        if (bonusContent) {
+            pattern = Pattern.compile("[*^~]?#{1,2}[QWERTYUIOPASDFGHJKLZXCVBNM]{3,4}");
+        } else {
+            pattern = Pattern.compile("\\*?#{1,2}[QWERTYUIOPASDFGHJKLZXCVBNM]{3,4}");
+        }
+        Matcher matcher = pattern.matcher(content);
+        List<String> codes = new ArrayList<>();
+        while (matcher.find()) {
+            codes.add(matcher.group(0));
+        }
+        return codes;
     }
 
     public static String getAirportName(String code, List<String[]> airportLookup, Map<String, Integer> airportLookupIndexMap) {
