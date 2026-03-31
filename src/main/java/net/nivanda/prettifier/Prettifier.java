@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 
 public class Prettifier {
+
+    final boolean BonusContent = false;
+
     public static void main(String[] args) {
         String content;
         List<String[]> airportLookup;
