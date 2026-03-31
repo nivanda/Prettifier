@@ -23,10 +23,13 @@ public class DateTimeSolver {
                 switch (format) {
                     case "D":
                         time = zone.format(DateTimeFormatter.ofPattern("dd MMM yyyy"));
+                        break;
                     case "T12":
                         time = zone.format(DateTimeFormatter.ofPattern("hh:mma")) + " (" + zone.format(formatter) + ")";
+                        break;
                     case "T24":
                         time = zone.format(DateTimeFormatter.ofPattern("HH:mm")) + " (" + zone.format(formatter) + ")";
+                        break;
                     default:
                         time = matcher.group(0);
                 }
