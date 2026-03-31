@@ -105,9 +105,25 @@ public class AirportCodeManager {
         return codes;
     }
 
-    public static String getAirportName(String code, List<String[]> airportLookup, Map<String, Integer> airportLookupIndexMap) {
+    public static String getAirportName(String code, List<String[]> airportLookup, Map<String, Integer> airportLookupIndexMap, boolean bonusContent) {
         code = code.replaceAll("#", "");
         int indexOfReturn = airportLookupIndexMap.get("name");
+        if (bonusContent) {
+            switch (code.charAt(0)) {
+                case '*':
+                    indexOfReturn = airportLookupIndexMap.get("municipality");
+                    code = code.replace("*", "");
+                    break;
+                case '^':
+                    indexOfReturn = airportLookupIndexMap.get("iso_country");
+                    code = code.replace("^", "");
+                    break;
+                case '~':
+                    indexOfReturn = airportLookupIndexMap.get("coordinates");
+                    code = code.replace("~", "");
+                    break;
+            }
+        }
         if (code.indexOf('*') == 0) {
             indexOfReturn = airportLookupIndexMap.get("municipality");
             code = code.replace("*", "");
