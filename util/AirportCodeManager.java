@@ -1,4 +1,4 @@
-package net.nivanda.prettifier.util;
+package util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,7 +95,7 @@ public class AirportCodeManager {
         if (bonusContent) {
             pattern = Pattern.compile("[*^~]?#{1,2}[QWERTYUIOPASDFGHJKLZXCVBNM]{3,4}");
         } else {
-            pattern = Pattern.compile("\\*?#{1,2}[QWERTYUIOPASDFGHJKLZXCVBNM]{3,4}");
+            pattern = Pattern.compile("[*]?#{1,2}[QWERTYUIOPASDFGHJKLZXCVBNM]{3,4}");
         }
         Matcher matcher = pattern.matcher(content);
         List<String> codes = new ArrayList<>();

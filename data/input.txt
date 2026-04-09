@@ -1,0 +1,8 @@
+Departure airport: #AHJ
+Departure date D(2026-04-01T22:00Z)
+Departure Time T24(2026-04-01T22:00Z)
+
+
+
+Arrival airport: ##AGGH
+Arriving in *##AGGH at T12(2026-02-29T13:00+05:30) on D(2026-02-28T13:00-11:00)
