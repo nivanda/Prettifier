@@ -93,9 +93,9 @@ public class AirportCodeManager {
     public static List<String> detectCodes(String content, boolean bonusContent) {
         Pattern pattern;
         if (bonusContent) {
-            pattern = Pattern.compile("[*^~]?#{1,2}[QWERTYUIOPASDFGHJKLZXCVBNM]{3,4}");
+            pattern = Pattern.compile("[*^~]?#{1,2}[A-Z]{3,4}");
         } else {
-            pattern = Pattern.compile("[*]?#{1,2}[QWERTYUIOPASDFGHJKLZXCVBNM]{3,4}");
+            pattern = Pattern.compile("[*]?#{1,2}[A-Z]{3,4}");
         }
         Matcher matcher = pattern.matcher(content);
         List<String> codes = new ArrayList<>();

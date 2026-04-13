@@ -74,6 +74,7 @@ public class FileIO {
                 boolean skipComa = false;
                 String[] splitLine = new String[6];
                 int wordIndex = 0;
+                int removedChar = 0;
                 // Iterates over EVERY LETTER in the line...
                 // Have fun debugging this....
                 for (int i = 0; i < line.length(); i++) {
@@ -96,10 +97,12 @@ public class FileIO {
                                 return null;
                         }
                         // Aquires the value and the rest of the string using the helper function down bellow.
-                        String[] temp = cutStrHere(tempLine, i);
+                        String[] temp = cutStrHere(tempLine, i-removedChar);
                         splitLine[wordIndex] = temp[0];
                         tempLine = temp[1];
+                        removedChar += temp[0].length() + 1;
                         wordIndex++;
+                        System.out.println("Cut with ,\" ");
                     // This will run most of the time.
                     } else if (line.charAt(i) == ',') {
                         if (skipComa) {
@@ -109,10 +112,12 @@ public class FileIO {
                                 System.err.println("Airport lookup malformed");
                                 return null;
                             }
-                            String[] temp = cutStrHere(tempLine, i);
+                            String[] temp = cutStrHere(tempLine, i-removedChar);
                             splitLine[wordIndex] = temp[0];
                             tempLine = temp[1];
+                            removedChar += temp[0].length() + 1;
                             wordIndex++;
+                            System.out.println("Cut with ,");
                         }
                     // In the end the string will be cut the point where the last value IS the string.
                     // This took an impressive amount of time to figure out....
@@ -122,10 +127,12 @@ public class FileIO {
                             return null;
                         }
                         splitLine[wordIndex] = tempLine;
+                        System.out.println("Added end");
                     }
                 }
                 // That's it huh....
                 csv.add(splitLine);
+                System.out.println("Done with line");
             }
             // And here we create the Object to send back.
             // You can probably see how the comments degrade the lower you go.
@@ -144,7 +151,7 @@ public class FileIO {
     // This is totally not stolen from StackOverflow...
     // Returns the substring before and after the split point.
     private static String[] cutStrHere(String str, int i) {
-        return new String[] {str.substring(0, 1), str.substring(i + 1)};
+        return new String[] {str.substring(0, i), str.substring(i + 1)};
     }
 
     // Returns the map for the aiport lookup file.

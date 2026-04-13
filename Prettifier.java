@@ -5,7 +5,7 @@ import java.util.Map;
 
 public class Prettifier {
 
-    final public static boolean BonusContent = true;
+    final public static boolean BonusContent = false;
     public static String content;
     public static AirportLookup airportLookup;
 
@@ -24,6 +24,12 @@ public class Prettifier {
             if (content == null) return;
             airportLookup = FileIO.readCsv(args[2]);
             if (airportLookup == null) return;
+            for (String[] line : airportLookup.getLookup()) {
+                for (String value : line) {
+                    System.out.print(value + "|"); 
+                }
+                System.out.println();
+            }
             PrettifierMain();
             FileIO.writeTxt(args[1], content);
         }
