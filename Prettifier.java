@@ -2,6 +2,8 @@ import util.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Prettifier {
 
@@ -24,12 +26,6 @@ public class Prettifier {
             if (content == null) return;
             airportLookup = FileIO.readCsv(args[2]);
             if (airportLookup == null) return;
-            for (String[] line : airportLookup.getLookup()) {
-                for (String value : line) {
-                    System.out.print(value + "|"); 
-                }
-                System.out.println();
-            }
             PrettifierMain();
             FileIO.writeTxt(args[1], content);
         }
@@ -39,11 +35,15 @@ public class Prettifier {
         content = content.replace("\f", "\n");
         content = content.replace("\r", "\n");
         content = content.replace("\u000B", "\n");
-        List<String> codes = AirportCodeManager.detectCodes(content, BonusContent);
-        for (String code : codes) {
-            String replacementText = AirportCodeManager.getAirportName(code, airportLookup.getLookup(), airportLookup.getMap(), BonusContent);
-            if (replacementText != null) content = content.replace(code, replacementText);
+        Pattern pattern = Pattern.compile("\n{3,}");
+        Matcher matcher = pattern.matcher(content);
+        StringBuilder result = new StringBuilder();
+        while (matcher.find()) {
+            matcher.appendReplacement(result, Matcher.quoteReplacement("\n\n"));
         }
+        matcher.appendTail(result);
+        content = result.toString();
         content = DateTimeSolver.solveDateTime(content);
+        content = AirportCodeManager.detectAndReplaceCodes(content, airportLookup.getLookup(), airportLookup.getMap(), bonusContent);
     }
 }
