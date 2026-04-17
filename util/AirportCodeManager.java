@@ -90,7 +90,7 @@ public class AirportCodeManager {
         return codesInContent;
     }
 
-    public static List<String> detectCodes(String content, boolean bonusContent) {
+    public static String detectAndReplaceCodes(String content, List<String[]> lookup, Map<String, Integer> map, boolean bonusContent) {
         Pattern pattern;
         if (bonusContent) {
             pattern = Pattern.compile("[*^~]?#{1,2}[A-Z]{3,4}");
@@ -98,15 +98,17 @@ public class AirportCodeManager {
             pattern = Pattern.compile("[*]?#{1,2}[A-Z]{3,4}");
         }
         Matcher matcher = pattern.matcher(content);
-        List<String> codes = new ArrayList<>();
+        StringBuilder out = new StringBuilder();
         while (matcher.find()) {
-            codes.add(matcher.group(0));
+            String replacement = getAirportName(matcher.group(), lookup, map, bonusContent);
+            if (replacement == null) continue;
+            matcher.appendReplacement(out, Matcher.quoteReplacement(replacement));
         }
-        return codes;
+        matcher.appendTail(out);
+        return out.toString();
     }
 
     public static String getAirportName(String code, List<String[]> airportLookup, Map<String, Integer> airportLookupIndexMap, boolean bonusContent) {
-        code = code.replaceAll("#", "");
         int indexOfReturn = airportLookupIndexMap.get("name");
         if (bonusContent) {
             switch (code.charAt(0)) {
@@ -124,10 +126,15 @@ public class AirportCodeManager {
                     break;
             }
         }
-        if (code.indexOf('*') == 0) {
+        if (code.charAt(0) == '*') {
             indexOfReturn = airportLookupIndexMap.get("municipality");
             code = code.replace("*", "");
         }
+        boolean borked = false;
+        if (code.length() - code.replace("#", "").length() == 1 && code.length() - code.replaceAll("A-Z", "").length() == 4) borked = true;
+        if (code.length() - code.replace("#", "").length() == 2 && code.length() - code.replaceAll("A-Z", "").length() == 3) borked = true;
+        if (borked) return null;
+        code = code.replace("#", "");
         int indexOfCode = airportLookupIndexMap.get("icao_code");
         if (code.length() == 3) indexOfCode = airportLookupIndexMap.get("iata_code");
         for (String[] line : airportLookup) {
