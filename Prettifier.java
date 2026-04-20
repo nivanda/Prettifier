@@ -1,12 +1,11 @@
 import util.*;
 
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.*;
+import java.util.regex.*;
 
 public class Prettifier {
 
+    // Change this to true to enable bonus features.
     final public static boolean BonusContent = false;
     public static String content;
     public static AirportLookup airportLookup;
@@ -17,8 +16,8 @@ public class Prettifier {
         } else if (args[0].equals("-h") && args.length == 1) {
             System.out.println("itinerary usage:\n$ java Prettifier.java ./input.txt ./output.txt ./airport-lookup.csv");
         } else if (args.length == 2 && args[0].equals("-linebreakGen") && BonusContent) {
-            content = "Line 1: Vertical Tab coming now...\u000BLine 2: Form Feed coming now...\fLine 3: Carriage Return coming now...\rLine 4: Done.";
-            FileIO.writeTxt(content, args[1]);
+            content = "Line 1: Vertical Tab coming now...\u000B\u000B\u000BLine 2: Form Feed coming now...\fLine 3: Carriage Return coming now...\rLine 4: Done.";
+            FileIO.writeTxt(args[1], content);
         } else if (args.length < 3) {
             System.out.println("itinerary usage:\n$ java Prettifier.java ./input.txt ./output.txt ./airport-lookup.csv");
         } else {
@@ -44,6 +43,6 @@ public class Prettifier {
         matcher.appendTail(result);
         content = result.toString();
         content = DateTimeSolver.solveDateTime(content);
-        content = AirportCodeManager.detectAndReplaceCodes(content, airportLookup.getLookup(), airportLookup.getMap(), bonusContent);
+        content = AirportCodeManager.detectAndReplaceCodes(content, airportLookup.getLookup(), airportLookup.getMap(), BonusContent);
     }
 }
