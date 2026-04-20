@@ -37,3 +37,7 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+data/output.txt
+data/lookup.csv
+data/linebreak.txt
