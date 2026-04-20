@@ -1,6 +1,18 @@
 Departure airport: #AHJ
 Departure date D(2026-04-01T22:00Z)
 Departure Time T24(2026-04-01T22:00Z)
+Arrival time = T12(5000-12-28T20:00-09:30)
+Arrival time = T12(6000-12-23T00:00+11:59)
+Arrival time = T12(8000-12-31T12:00Z)
+Arrival date = D(2000-02-31T22:00Z)
+#RYG | ^#RYG | ~#RYG | *#RYG
+^##AGGH
+~##AGGH
+
+
+
+
+
 
 
 
