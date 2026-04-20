@@ -27,77 +27,6 @@ public class FileIO {
             e.printStackTrace();
         }
     }
-
-    // REMOVE BEFORE PUSHING INTO REVIEW PHASE!!!
-    public static AirportLookup OldreadCsv(String path) {
-        String LEGAL_CHARACTERS = "QWERTYUIOPASDFGHJKLZXCVBNM" +
-                                    "qwertyuiopasdfghjklzxcvbnm" +
-                                    "1234567890" +
-                                    "!@#$%^&*()-_=+\\|[]{};':\",.<>/?`~ ";
-        try {
-            List<String[]> csv = new ArrayList<>();
-            List<String> lines = Files.readAllLines(Paths.get(path));
-            Map<String, Integer> map = getCSVColumnOrderMap(lines.getFirst().split(","));
-            lines.removeFirst();
-            for (String line : lines) {
-                String tempLine = line;
-                boolean skipComa = false;
-                String[] splitLine = new String[6];
-                int wordIndex = 0;
-                int removedChar = 0;
-                for (int i = 0; i < line.length(); i++) {
-                    if (LEGAL_CHARACTERS.indexOf(line.charAt(i)) == -1) {
-                        System.err.println("Airport lookup malformed");
-                        return null;
-                    } else if (line.charAt(i) == ',' && line.charAt(i + 1) == ',') {
-                        System.err.println("Airport lookup malformed");
-                        return null;
-                    } else if (line.charAt(i) == ',' && line.charAt(i + 1) == '"'){
-                        skipComa = true;
-                        if (wordIndex > 5) {
-                                System.err.println("Airport lookup malformed");
-                                return null;
-                        }
-                        String[] temp = cutStrHere(tempLine, i-removedChar);
-                        splitLine[wordIndex] = temp[0];
-                        tempLine = temp[1];
-                        removedChar += temp[0].length() + 1;
-                        wordIndex++;
-                        System.out.println("Cut with ,\" ");
-                    } else if (line.charAt(i) == ',') {
-                        if (skipComa) {
-                            skipComa = false;
-                        } else {
-                            if (wordIndex > 5) {
-                                System.err.println("Airport lookup malformed");
-                                return null;
-                            }
-                            String[] temp = cutStrHere(tempLine, i-removedChar);
-                            splitLine[wordIndex] = temp[0];
-                            tempLine = temp[1];
-                            removedChar += temp[0].length() + 1;
-                            wordIndex++;
-                            System.out.println("Cut with ,");
-                        }
-                    } else if (i + 1 == line.length()) {
-                        if (wordIndex > 5) {
-                            System.err.println("Airport lookup malformed");
-                            return null;
-                        }
-                        splitLine[wordIndex] = tempLine;
-                        System.out.println("Added end");
-                    }
-                }
-                csv.add(splitLine);
-                System.out.println("Done with line");
-            }
-            AirportLookup out = new AirportLookup(map, csv);
-            return out;
-        } catch (IOException e) {
-            System.err.println("Airport lookup not found");
-            return null;
-        }
-    }
     
     // Reads airport lookup csv file into memory.
     // AirportLookup object is used to return multiple values of different types.
@@ -143,12 +72,6 @@ public class FileIO {
             return null;
         }
     }
-
-    // REMOVE BEFORE PUSHING INTO REVIEW PHASE!!!
-    private static String[] cutStrHere(String str, int i) {
-        return new String[] {str.substring(0, i), str.substring(i + 1)};
-    }
-
 
     public static Map<String, Integer> getCSVColumnOrderMap(String[] keys) {
         Map<String, Integer> OrderMap = new HashMap<>();
