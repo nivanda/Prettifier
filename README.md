@@ -16,11 +16,11 @@ This is a CLI based tool that converts hard to read itinerary text files into mo
 Clone the project with this command in the terminal:
 
 ```
-git clone https://github.com/nivanda/Prettifier.git
+git clone https://github.com/nivanda/prettifier.git
 ```
 then:
 ```
-cd Prettifier/
+cd prettifier/
 ```
 ### Usage
 The tool requires 3 arguments to work properly
